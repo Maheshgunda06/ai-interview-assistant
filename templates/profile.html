@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>👤 Profile</h2>
+
+<div class="score-item">Username: {{ user }}</div>
+<div class="score-item">Total Attempts: {{ total }}</div>
+<div class="score-item">Best Score: {{ best }}</div>
+<div class="score-item">Average Score: {{ avg }}</div>
+
+<a href="/dashboard">
+    <button>⬅ Back</button>
+</a>
+
+{% endblock %}

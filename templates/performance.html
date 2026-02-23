@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="app-card performance-card">
+
+    <h2>📊 Performance Analytics</h2>
+    {% if badges %}
+<h3 style="margin-top:20px;">🏆 Achievements</h3>
+
+{% for badge in badges %}
+<div class="badge-item">
+    {{ badge }}
+</div>
+{% endfor %}
+{% endif %}
+
+    <div class="chart-container">
+    <canvas id="scoreChart"></canvas>
+</div>
+
+    <a href="/dashboard">
+        <button class="secondary-btn">← Back</button>
+    </a>
+
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const scores = {{ scores | tojson }};
+
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: scores.map((_, index) => "Attempt " + (index + 1)),
+            datasets: [{
+                label: "Interview Score",
+                data: scores,
+                borderColor: "#00c6ff",
+                backgroundColor: "rgba(0,198,255,0.2)",
+                tension: 0.4,
+                fill: true,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            animation: {
+                duration: 1500
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+</script>
+<div class="progress-wrapper">
+    <div class="progress-circle">
+        <span id="scoreValue">85%</span>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>📚 Question Bank</h2>
+
+{% for category, qs in questions.items() %}
+    <h3>{{ category }}</h3>
+    {% for q in qs %}
+        <div class="score-item">{{ q }}</div>
+    {% endfor %}
+{% endfor %}
+
+<a href="/dashboard">
+    <button>⬅ Back</button>
+</a>
+
+{% endblock %}

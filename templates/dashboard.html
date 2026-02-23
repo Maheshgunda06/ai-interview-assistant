@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 style="margin-bottom:5px;">Welcome {{ user }} 👋</h1>
+<p style="opacity:0.7; margin-bottom:25px;">
+AI Interview Preparation Platform
+</p>
+
+<div class="grid-container">
+
+    <a href="/interview" class="grid-item">
+        🎤
+        <span>Interview</span>
+    </a>
+
+    <a href="/performance" class="grid-item">
+        📊
+        <span>Analytics</span>
+    </a>
+
+    <a href="/question-bank" class="grid-item">
+        📚
+        <span>Questions</span>
+    </a>
+
+    <a href="/leaderboard" class="grid-item">
+        🏆
+        <span>Leaderboard</span>
+    </a>
+
+    <a href="/about" class="grid-item">
+        ℹ
+        <span>About</span>
+    </a>
+
+    <a href="/settings" class="grid-item">
+        ⚙
+        <span>Settings</span>
+    </a>
+
+</div>
+
+<a href="/logout">
+    <button class="logout-btn" style="margin-top:20px;">Logout</button>
+</a>
+
+{% endblock %}

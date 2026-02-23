@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+<meta name="theme-color" content="#00c6ff">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app-wrapper">
+
+    <!-- Theme Button -->
+    <button onclick="toggleTheme()" class="theme-btn">
+        🌙 / ☀
+    </button>
+
+    <!-- Top Navbar -->
+    <div class="top-nav">
+        <div class="logo">AI Interview</div>
+        <a href="/profile" class="profile-icon">👤</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="mobile-nav">
+    <a href="/dashboard" class="nav-item {% if request.path == '/dashboard' %}active{% endif %}">
+        🏠<span>Home</span>
+    </a>
+
+    <a href="/performance" class="nav-item {% if request.path == '/performance' %}active{% endif %}">
+        📊<span>Stats</span>
+    </a>
+
+    <a href="/interview" class="nav-item center-btn {% if request.path == '/interview' %}active-center{% endif %}">
+        🎤
+    </a>
+
+    <a href="/leaderboard" class="nav-item {% if request.path == '/leaderboard' %}active{% endif %}">
+        🏆<span>Rank</span>
+    </a>
+
+    <a href="/settings" class="nav-item {% if request.path == '/settings' %}active{% endif %}">
+        ⚙<span>Settings</span>
+    </a>
+</div>
+
+</div>
+
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("light-mode");
+
+    localStorage.setItem("theme",
+        document.body.classList.contains("light-mode")
+        ? "light" : "dark");
+}
+
+window.onload = function() {
+    if(localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light-mode");
+    }
+}
+</script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

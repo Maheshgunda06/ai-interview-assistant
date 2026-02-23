@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="app-card">
+
+    <h2>📄 Upload Resume</h2>
+
+    <form method="POST" action="{{ url_for('interview') }}" enctype="multipart/form-data">
+        <input type="file" name="resume" required>
+        <div id="loader" class="loader" style="display:none;"></div>
+        <button type="submit">Generate Questions</button>
+    </form>
+
+    <hr style="margin:25px 0; opacity:0.2;">
+    {% if questions %}
+    <div class="question-list">
+        {% for q in questions %}
+            <p class="question-item">{{ q }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+    <h2>🎤 Mock Interview</h2>
+
+    {% if question %}
+        <p style="margin-bottom:10px;"><strong>{{ question }}</strong></p>
+    {% endif %}
+
+    <form method="POST" action="/evaluate">
+    <div id="timer" style="font-weight:bold; margin-bottom:10px;">
+⏱ Time Left: 60s
+</div>
+
+        <textarea id="answerBox" name="answer"
+        placeholder="Type your answer here..." required></textarea>
+
+        <button type="button" onclick="startVoice()">🎙 Speak</button>
+
+        <button type="submit">Submit Answer</button>
+
+    </form>
+
+    {% if score %}
+        <div class="score-box">
+            ⭐ Your Score: {{ score }}
+        </div>
+    {% endif %}
+
+    <a href="/dashboard">
+        <button class="secondary-btn">← Back</button>
+    </a>
+
+</div>
+
+<script>
+function startVoice() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+
+    recognition.onresult = function(event) {
+        document.getElementById("answerBox").value =
+            event.results[0][0].transcript;
+    };
+
+    recognition.start();
+}
+</script>
+
+{% endblock %}
