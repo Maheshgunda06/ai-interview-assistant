@@ -1,4 +1,7 @@
 Flask
+gunicorn
 PyPDF2
 textblob
-gunicorn
+matplotlib
+Werkzeug
+nltk
