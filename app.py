@@ -9,13 +9,17 @@ from textblob import TextBlob
 import PyPDF2
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "database.db")
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 # Create Database
 def init_db():
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     c = conn.cursor()
 
     # Users table
@@ -54,7 +58,7 @@ def register():
 
         hashed_password = generate_password_hash(password)
 
-        conn = sqlite3.connect("database.db")
+        conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
         c = conn.cursor()
         c.execute("INSERT INTO users (username,password) VALUES (?,?)",
                   (username, hashed_password))
@@ -71,7 +75,7 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     c = conn.cursor()
     c.execute("SELECT password FROM users WHERE username=?", (username,))
     user = c.fetchone()
@@ -169,7 +173,7 @@ def evaluate():
     score = round((word_count / 20) + (sentiment * 5), 2)
 
     # Save to database
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     c = conn.cursor()
     c.execute("INSERT INTO scores (username, score) VALUES (?, ?)",
               (session["user"], score))
@@ -183,7 +187,7 @@ def performance():
     if "user" not in session:
         return redirect("/")
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     c = conn.cursor()
 
     c.execute("SELECT score FROM scores WHERE username=?",
@@ -212,7 +216,7 @@ def profile():
     if "user" not in session:
         return redirect("/")
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     c = conn.cursor()
 
     c.execute("SELECT score FROM scores WHERE username=?", (session["user"],))
@@ -245,7 +249,7 @@ def question_bank():
     return render_template("question_bank.html", questions=questions)
 @app.route("/leaderboard")
 def leaderboard():
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH, timeout=10, check_same_thread=False)
     c = conn.cursor()
     c.execute("SELECT username, MAX(score) FROM scores GROUP BY username ORDER BY MAX(score) DESC")
     data = c.fetchall()
